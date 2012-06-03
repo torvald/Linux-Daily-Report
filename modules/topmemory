@@ -1,5 +1,5 @@
 #! /bin/bash
-# Processes that uses most memory on system
+# Processes that uses most memory on system, does not include the sort process as it is used here
 
 #!/bin/sh
 
@@ -8,8 +8,8 @@ printf "%-8s %-8s %-9s %s\n" "PID" " User " "Total" "Command"
 printf "%-8s %-8s %-9s %s\n" "---" "------" "-----" "-------"
 
 for PID in `ps -e | awk '$1 ~ /[0-9]+/ { print $1 }'`; do
-    CMD=`ps -o comm -p $PID | tail -1`
-    if [[ "$CMD" == "sort" ]]; then 
+    CMD=`ps -o command -p $PID | tail -1`
+    if [[ "$CMD" == *sort* ]]; then 
         continue
     fi
     USER=`ps -o euser -p $PID | tail -1`
@@ -17,4 +17,4 @@ for PID in `ps -e | awk '$1 ~ /[0-9]+/ { print $1 }'`; do
     if [ -n "$TOTAL" ]; then
         printf "%-8s %-8s %-9s %s\n" "$PID" "$USER" "$TOTAL" "$CMD"
     fi
-done | /usr/bin/sort -nr -k3 | head -n 10
+done | sort -nr -k3 | head -n 10
