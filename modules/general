@@ -7,7 +7,7 @@ swap=$(free -m | grep "Swap" | awk '{print $3,"/",$2}')
 load=$(uptime | awk '{print $10, $11, $12}')
 uptime=$(uptime | awk '{print $3, $4}' | tr -d ",")
 
-echo UPTIME: $uptime
-echo SYSTEMLOAD: $load
-echo MEMORY: $mem
-echo SWAP  : $swap
+echo Uptime: $uptime
+echo System load: $load
+echo Memory: $mem
+echo Swap: $swap

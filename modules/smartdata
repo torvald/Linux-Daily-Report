@@ -6,6 +6,11 @@ if (($UID != 0)); then
     exit 1
 fi
 
+if ! $(which smartctl &> /dev/null); then
+    echo "smart-tools not installed"
+    exit 1
+fi
+
 ddtemp="/tmp/smartdata_$$"
 touch $ddtemp
 
@@ -29,19 +34,8 @@ while read DISK; do
     output=""
     typeset -u UCDISK=$DISK
 
-    if (( $ctemp > 42 && $ctemp < 48 )); then
-        output+="$UCDISK: \E[33;40m\033[1m$temp"°C"\033[0m, "
-    elif (( $ctemp > 48 )); then
-        output+="$UCDISK: \E[31;40m\033[1m$temp"°C"\033[0m, "
-    else
-        output+="$UCDISK: \E[32;40m\033[1m$temp"°C"\033[0m, "
-    fi
-
-    if (( smart == "PASSED" )); then
-        output+="SMART: \E[32;40m\033[1m$smart\033[0m. "
-    else
-        output+="SMART: \E[33;40m\033[1m$smart\033[0m. "
-    fi
+    output+="$UCDISK: $temp°C, "
+    output+="SMART: $smart, "
 
     if (( $age > 365 )); then
         age=$(echo "scale=2; $age"/365 | bc)
@@ -49,14 +43,7 @@ while read DISK; do
     else
         output+="AGE: $age DAYS. "
     fi
-
-    if (( lcc > 300000 )); then
-        output+="LOAD COUNT: \E[31;40m\033[1m$loadcount\033[0m "
-    elif (( lcc > 20000 && lcc < 300000 ));then
-        output+="LOAD COUNT: \E[33;40m\033[1m$loadcount\033[0m "
-    else
-        output+="LOAD COUNT: \E[32;40m\033[1m$loadcount\033[0m "
-    fi
+    output+="LOAD COUNT: $loadcount, "
     output+="SIZE: $size GB"
     echo -e $output
 

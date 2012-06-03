@@ -8,6 +8,12 @@ if (($UID != 0)); then
     echo "*!* FATAL: RUN AS ROOT"
     exit 1
 fi
+
+if ! $(which mdadm &> /dev/null); then
+    echo "mdadm not installed"
+    exit 1
+fi
+
 echo "******************** mdadm arrays ********************"
 
 if $INCLUDEPARTS; then
