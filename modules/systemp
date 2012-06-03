@@ -6,7 +6,7 @@ if ! $(which sensors &> /dev/null); then
     exit 1
 fi
 
-echo "******************** system temperatures ********************"
+echo "******************** System temperatures ********************"
 
 cputemp=$(sensors | grep "CPU Temp" | awk '{print $3}')
 mbtemp=$(sensors | grep "MB Temperature" | awk '{print $3}')

@@ -14,7 +14,7 @@ if ! $(which mdadm &> /dev/null); then
     exit 1
 fi
 
-echo "******************** mdadm arrays ********************"
+echo "******************** Software raid arrays ********************"
 
 if $INCLUDEPARTS; then
     grepLine="md([0-9])*"
