@@ -23,8 +23,7 @@ else
 fi
 
 for array in `ls -1 /dev | egrep $grepLine`; do
-    echo -ne "\E[35;40m\033[1mARRAY: \033[0m"
-    echo -e "\E[35;40m\033[1m$array\033[0m"
+    echo "Array: $array"
     RAID_STATE=$(mdadm --detail /dev/$array | grep "State " | awk '{print "Raid state: "$3}')
     RAID_DISKS=$(mdadm --detail /dev/$array | grep -E '(Raid|Working) Devices' | xargs | awk '{print "RAID disks:",$8,"/",$4,"online"}')
     echo "$RAID_STATE"
