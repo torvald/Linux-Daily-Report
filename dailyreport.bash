@@ -10,7 +10,7 @@ errorMsg=""
 MODULES=$(config modules)
 for MODUL in $MODULES; do
     if [ ! -f modules/$MODUL ]; then
-        errorMsg=$errorMsg"<br> Module $MODUL does not exist!"    
+        errorMsg=$errorMsg"<br> Module $MODUL does not exist!<br>"    
         continue
     fi
     modules/$MODUL > $TEMP # temp file from systemCheck
@@ -18,10 +18,9 @@ for MODUL in $MODULES; do
         cat $TEMP | sed 's/$/<br>/g' | sed 's/\t/\&emsp;/g' >> $MAIL
         echo "<br><br>" >> $MAIL
     else
-        errorMsg=$errorMsg"<br> Module $MODUL returned with error signal"    
+        errorMsg=$errorMsg"<br> Module $MODUL returned with error signal<br>"
     fi
 done
-
 
 # appending any errors
 if [[ $errorMsg != "" ]]; then
@@ -36,7 +35,6 @@ else
         cat $MAIL | mail -a 'Content-Type: text/html' -s "Dailyreport test" $RECIVER
     done
 fi
-
 
 
 # Cleaning

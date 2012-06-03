@@ -1,0 +1,21 @@
+#! /bin/bash
+# Shows current ufw status
+
+if (($UID != 0)); then
+    echo "*!* FATAL: RUN AS ROOT"
+    exit 1
+fi
+
+echo "******************** ufw firewall ********************"
+if ! $(which ufw &> /dev/null); then
+    echo "ufw not installed"
+    exit 1
+fi
+
+status=$(ufw status | head -n 1)
+if [[ "$status" == *inactive* ]]; then
+    echo "ufw is not enabled"
+    exit 1
+fi
+
+ufw status verbose
