@@ -3,6 +3,7 @@
 
 #!/bin/sh
 
+echo "******************** top memory usage ********************"
 printf "%-8s %-8s %-9s %s\n" "PID" " User " "Total" "Command"
 printf "%-8s %-8s %-9s %s\n" "---" "------" "-----" "-------"
 
