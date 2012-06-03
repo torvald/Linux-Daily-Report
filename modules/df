@@ -1,0 +1,16 @@
+#!/bin/bash
+# only taking thoes with GB or TB
+echo "******************** Harddrives ********************"
+
+
+MODULE_TEMP_FILE="/tmp/$(basename $0)_$$"
+df -h > $MODULE_TEMP_FILE
+
+while read line; do
+    if echo $line | awk '{print $2}' | egrep -q "G|T|Size"; then
+        echo $line | sed 's/\s/\t/g'
+    fi
+done < $MODULE_TEMP_FILE
+
+rm $MODULE_TEMP_FILE
+

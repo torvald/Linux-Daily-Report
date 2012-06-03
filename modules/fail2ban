@@ -1,0 +1,20 @@
+#!/bin/bash
+# only taking thoes with GB or TB
+echo "******************** fail2ban ********************"
+
+
+MODULE_TEMP_FILE="/tmp/$(basename $0)_$$"
+grep "$(date --date="yesterday" +"%Y-%m-%d")" /var/log/fail2ban.log | grep "Ban" > $MODULE_TEMP_FILE
+
+if ! ps aux | grep -q fail2ban; then
+    echo "Alert! Fail2ban is not running?!"
+fi
+
+if [ ! -s $MODULE_TEMP_FILE ]; then
+    echo "No banned IPs"
+else
+    cat $MODULE_TEMP_FILE
+fi
+
+rm $MODULE_TEMP_FILE
+
