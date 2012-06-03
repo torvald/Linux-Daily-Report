@@ -1,0 +1,8 @@
+#!/bin/bash
+# only taking thoes with GB or TB
+echo "******************** MySQL ********************"
+
+du -h /var/lib/mysql/ | grep M 
+
+#rm $MODULE_TEMP_FILE
+

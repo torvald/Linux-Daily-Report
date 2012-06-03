@@ -1,7 +1,5 @@
 #!/bin/bash
-# only taking thoes with GB or TB
 echo "******************** fail2ban ********************"
-
 
 MODULE_TEMP_FILE="/tmp/$(basename $0)_$$"
 grep "$(date --date="yesterday" +"%Y-%m-%d")" /var/log/fail2ban.log | grep "Ban" > $MODULE_TEMP_FILE

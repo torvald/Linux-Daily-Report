@@ -3,12 +3,16 @@
 # Creds til drift@TIHLDE - mye snaxx hentet fra dem
 
 source inc/functions.bash
-source inc/checkSystem.bash
+source inc/init.bash
 
 errorMsg=""
 
 MODULES=$(config modules)
 for MODUL in $MODULES; do
+    if [ ! -f modules/$MODUL ]; then
+        errorMsg=$errorMsg"<br> Module $MODUL does not exist!"    
+        continue
+    fi
     modules/$MODUL > $TEMP # temp file from systemCheck
     if [ $? == 0 ]; then
         cat $TEMP | sed 's/$/<br>/g' | sed 's/\t/\&emsp;/g' >> $MAIL
@@ -21,7 +25,7 @@ done
 
 # appending any errors
 if [[ $errorMsg != "" ]]; then
-    echo $errorMsg
+    sed -i "1i$errorMsg" $MAIL
 fi
 
 if [[ $1 == "test" ]]; then
