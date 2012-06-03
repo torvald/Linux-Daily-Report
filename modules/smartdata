@@ -35,16 +35,16 @@ while read DISK; do
     typeset -u UCDISK=$DISK
 
     output+="$UCDISK: $temp°C, "
-    output+="SMART: $smart, "
+    output+="S.M.A.R.T: $smart, "
 
     if (( $age > 365 )); then
         age=$(echo "scale=2; $age"/365 | bc)
-        output+="AGE: $age YEARS. "
+        output+="age: $age years. "
     else
-        output+="AGE: $age DAYS. "
+        output+="age: $age days. "
     fi
-    output+="LOAD COUNT: $loadcount, "
-    output+="SIZE: $size GB"
+    output+="Load count: $loadcount, "
+    output+="Size: $size GB"
     echo -e $output
 
 done < $ddtemp
