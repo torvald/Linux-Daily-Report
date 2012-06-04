@@ -6,7 +6,7 @@ source inc/functions.bash
 source inc/init.bash
 
 errorMsg=""
-echo "<pre>" > $MAIL
+echo "<pre style='font-family: \"courier new\", courier, monospace; font-size: 11px;'>" > $MAIL
 MODULES=$(config modules)
 if [[ $MODULES == "modules not found in dailyreport.conf" ]]; then
     MODULES=$(ls modules)
