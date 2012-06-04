@@ -7,7 +7,7 @@ if (($UID != 0)); then
 fi
 
 echo "******************** Ufw firewall ********************"
-if ! $(which ufw &> /dev/null); then
+if ! $(hash ufw &> /dev/null); then
     echo "ufw not installed"
     exit 1
 fi

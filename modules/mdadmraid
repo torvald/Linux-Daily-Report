@@ -9,7 +9,7 @@ if (($UID != 0)); then
     exit 1
 fi
 
-if ! $(which mdadm &> /dev/null); then
+if ! $(hash mdadm &> /dev/null); then
     echo "mdadm not installed"
     exit 1
 fi

@@ -1,0 +1,11 @@
+#! /bin/bash
+
+if ! $(hash vnstat &> /dev/null); then
+    echo "vnstat not installed"
+    exit 1
+fi
+
+echo "Out:"
+vnstat -h -s | grep "rx" | cut -b 15-56
+vnstat -h -s | grep "yesterday" | cut -b 15-58
+vnstat -h | head -n13 | tail -n12
