@@ -5,6 +5,7 @@ if ! $(hash netstat && hash perl); then
     exit 1
 fi
 
+echo "******************** Open ports ********************"
 printf "%-7s %-12s %-6s %-8s\n" "Port" "Command" "PID" "User"
 printf "%-7s %-12s %-6s %-8s\n" "----" "-------" "---" "----"
 
