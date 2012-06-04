@@ -1,0 +1,31 @@
+#!/bin/bash
+echo "******************** logs ********************"
+LANG=en_US.UTF-8
+
+
+date_format1=$(date "+%b %e")
+date_format2=$(date "+%d/%b/%Y")
+date_format3=$(date "+%b %d")
+date_format4=$(date "+%Y-%m-%d")
+date_format5=$(date "+%Y/%m/%d")
+
+TEMPLOGFILE=/tmp/logs$$
+for log in $(find . /var/log/ | egrep "\.log$"); do
+    cat $log | egrep "$date_format1|$date_format2|$date_format3|$date_format4|$date_format5" > $TEMPLOGFILE
+    lines=$(cat $TEMPLOGFILE | wc -l)
+    if (( $lines > 500 )); then
+        echo "<br>"
+        dataString=""
+        maxHeight=0
+        for hour in {0..23}; do
+            hour=$(printf %02d $hour)
+            lineNumbPrHour=$(cat $TEMPLOGFILE | egrep "$hour:[0-9]{2}:[0-9]{2}" | wc -l)
+            dataString="$dataString$lineNumbPrHour,"
+            if (( $lineNumbPrHour > $maxHeight )); then
+                maxHeight=$lineNumbPrHour  
+            fi
+        done
+        echo '<img src="http://chart.apis.google.com/chart?chxr=0,0,23|1,0,'$maxHeight'&chxt=x,y&chbh=a&chs=450x225&cht=bvs&chco=3072F3&chd=t:'${dataString%?}'&chdl=Number+of+lines&chtt='$log'" width="450" height="225" alt="'$log'" />'
+        head $TEMPLOGFILE
+    fi
+done

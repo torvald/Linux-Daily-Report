@@ -1,0 +1,20 @@
+#!/bin/bash
+echo "******************** Apache top errors/notices ********************"
+
+SHOWTOP=5
+
+LANG=en_US.UTF-8
+
+DATE_YESTERDAY=$(date --date "1 day ago" "+%b %d")
+
+tempFile="/tmp/apacheLogErrors_$$"
+
+for errorFile in `find /var/log/apache2/ | grep error | egrep "\.log$"`; do
+    grep "$DATE_YESTERDAY" $errorFile >> $tempFile
+done
+
+echo ""
+echo "Count                            Error"
+cat $tempFile | egrep -v "favicon" | cut -d']' -f4 | sort | uniq -c | sort -rn | sed 's/     / /' | head -n $SHOWTOP
+
+rm $tempFile

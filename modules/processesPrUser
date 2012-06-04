@@ -1,6 +1,5 @@
 #!/bin/bash
-# only taking thoes with GB or TB
-echo "******************** MySQL ********************"
+echo "******************** Processes pr user ********************"
 
 ps -ef | awk '{print $1}' | sort | uniq -c | sort -rn | head 
 
