@@ -27,3 +27,4 @@ if (( $? != 0 )); then
 	echo "*!* Fatal: Error creating tempfile: $TEMP (daily_report_$$_TEMP2)"
 	exit 1
 fi
+
