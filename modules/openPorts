@@ -5,22 +5,15 @@ if ! $(hash netstat && hash perl); then
     exit 1
 fi
 
-TEMPPORTS="/tmp/tempports_$$"
+printf "%-7s %-12s %-6s %-8s\n" "Port" "Command" "PID" "User"
+printf "%-7s %-12s %-6s %-8s\n" "----" "-------" "---" "----"
 
-printf "%-6s %-10s %-6s %-8s\n" "Port" "Command" "PID" "User"
-printf "%-6s %-10s %-6s %-8s\n" "----" "-------" "---" "----"
-
-netstat -an | grep "LISTEN" | perl -ne 'print "$1\n" if /0\.0\.0\.0:(\d+)\s+0\.0\.0\.0:\*/ || /:::(\d+)\s+:::\*/' | sort -n | uniq
-> $TEMPPORTS
-
-while read PORT; do
-    lsof -i $PORT | grep LISTEN | tail -n 1 | while read LINE; do
+for PORT in `netstat -an | grep "LISTEN" | perl -ne 'print "$1\n" if /0\.0\.0\.0:(\d+)\s+0\.0\.0\.0:\*/ || /:::(\d+)\s+:::\*/' | sort -n | uniq`; do
+    lsof -i :$PORT | grep LISTEN | tail -n 1 | while read LINE; do
         set $LINE
         COMMAND=$1
         PID=$2
         LSOF_USER=$3
-        out "$(printf "%-6d %-10s %-6d %-8s\n" "$PORT" "$COMMAND" "$PID"
-        "$LSOF_USER")"
+        printf "%-7d %-12s %-6d %-8s\n" "$PORT" "$COMMAND" "$PID" "$LSOF_USER"
     done
-done < "$TEMPPORTS"
-rm -f $TEMPPORTS
+done
