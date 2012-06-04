@@ -8,6 +8,9 @@ source inc/init.bash
 errorMsg=""
 
 MODULES=$(config modules)
+if [[ $MODULES == "" ]]; then
+    MODULES="general" # Add all
+fi
 for MODUL in $MODULES; do
     if [ ! -f modules/$MODUL ]; then
         errorMsg=$errorMsg"<br> Module $MODUL does not exist!<br>"    
