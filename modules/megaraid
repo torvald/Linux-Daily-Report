@@ -1,0 +1,25 @@
+#! /bin/bash
+# Prints megaraid status
+
+# If sas is used, change this to true
+SAS=false
+
+if ! $(hash megaraid-status &> /dev/null); then
+    echo "megaraid-status or megaraidsas-status not installed"
+    exit 1
+fi
+
+echo "******************** Software raid arrays ********************"
+
+if $SAS; then
+    megaraidsas-status
+    megaraidsas-status | grep -i optimal
+else
+    megaraid-status
+    megaraid-status | grep -i optimal
+fi
+
+# Check if raid status is optimal, if not, print red warning
+if ! [[ $? == 0 ]]; then
+    echo "<font color='red'>ALERT: RAID STATUS NOT OPTIMAL!</font>"
+fi
