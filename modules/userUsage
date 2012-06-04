@@ -1,0 +1,16 @@
+#!/bin/bash
+echo "******************** User Usage ********************"
+
+USERS=$(ls /home/)
+underOnMB="Under 1MB: "
+
+for USER in ${USERS[@]}
+do
+    du -sh /home/$USER | egrep "[0-9]M|[0-9]G|[0-9]T"
+    if [[ $? == 1 ]]; then
+        underOnMB=$underOnMB" $USER, "
+    fi
+done
+echo $underOnMB
+
+#rm $MODULE_TEMP_FILE
