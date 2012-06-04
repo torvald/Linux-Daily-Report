@@ -8,7 +8,7 @@ source inc/init.bash
 errorMsg=""
 
 MODULES=$(config modules)
-if [[ $MODULES == "" ]]; then
+if [[ $MODULES == "modules not found in dailyreport.conf" ]]; then
     MODULES="general" # Add all
 fi
 for MODUL in $MODULES; do
