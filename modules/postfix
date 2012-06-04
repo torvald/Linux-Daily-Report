@@ -1,0 +1,42 @@
+#! /bin/bash
+# Outputs total mail sent/received and top senders
+
+if ! $(hash postfix &> /dev/null); then
+    echo "postfix not installed"
+    exit 1
+fi
+
+echo "******************** Postfix mail ********************"
+
+TEMP="/tmp/mail_$$"
+TEMP2="/tmp/mail2_$$"
+
+totalReceived=$(grep "$(date --date="yesterday" +"%b %_d")" /var/log/mail.log | grep "postfix/pickup" | grep "uid=500" | wc -l)
+totalSent=0
+grep "$(date --date="yesterday" +"%b %_d")" /var/log/mail.log | grep "postfix/pickup" | grep -v "uid=500" > $TEMP
+
+while read LINE; do
+    if [[ $LINE == "" ]]; then
+        continue
+    fi
+    echo $LINE | awk '{print $8}' | sed 's/from=//' | tr -d "<>" >> $TEMP2
+    totalSent=$(($totalSent+1))
+done < $TEMP
+
+cat $TEMP2 | awk '{ total[$1] += 1 } END { for (i in total) print total[i], i}' | sort -nr | head -n5 > $TEMP
+
+echo Total sent: $totalSent
+echo Total received: $totalReceived
+
+if [[ -s $TEMP ]]; then
+echo ""
+X=1
+echo "Top senders:"
+    while read LINE; do
+        set $LINE
+        echo -e "$X. $2 \t$1 \t($((100 * $1 / $totalSent))%)"
+        X=$(($X+1))
+    done < $TEMP
+fi
+
+trap "rm -f $TEMP; rm -f $TEMP2" SIGTERM EXIT
