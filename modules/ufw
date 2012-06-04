@@ -6,16 +6,15 @@ if (($UID != 0)); then
     exit 1
 fi
 
-echo "******************** Ufw firewall ********************"
 if ! $(hash ufw &> /dev/null); then
     echo "ufw not installed"
     exit 1
+else
+    echo "******************** Ufw firewall ********************"
+    status=$(ufw status | head -n 1)
+    if [[ "$status" == *inactive* ]]; then
+        echo "ufw is not enabled"
+    else
+        ufw status verbose
+    fi
 fi
-
-status=$(ufw status | head -n 1)
-if [[ "$status" == *inactive* ]]; then
-    echo "ufw is not enabled"
-    exit 1
-fi
-
-ufw status verbose
