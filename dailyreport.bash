@@ -1,9 +1,16 @@
 #!/bin/bash
-
 # Creds til drift@TIHLDE - mye snaxx hentet fra dem
+
+cd $(dirname $0)
 
 source inc/functions.bash
 source inc/init.bash
+
+# Check if we can send mail
+if ! $(hash mail &> /dev/null); then
+    echo "mail not installed"
+    exit 1
+fi
 
 errorMsg=""
 echo "<pre style='font-family: \"courier new\", courier, monospace; font-size: 11px;'>" > $MAIL
@@ -12,6 +19,7 @@ if [[ $MODULES == "modules not found in dailyreport.conf" ]]; then
     MODULES=$(ls modules)
     MODULES="${MODULES[@]}" # Add all
 fi
+
 for MODUL in $MODULES; do
     if [ ! -f modules/$MODUL ]; then
         errorMsg=$errorMsg"<br> Module $MODUL does not exist!<br>"    
@@ -26,8 +34,6 @@ for MODUL in $MODULES; do
         errorMsg=$errorMsg"Module $MODUL returned with error signal<br>"
     fi
 done
-
-
 
 DATE_YESTERDAY=$(date --date "1 day ago" +%d.%m.%Y)
 # appending any errors
