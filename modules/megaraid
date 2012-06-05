@@ -4,6 +4,7 @@
 # If sas is used, change this to true
 SAS=false
 
+
 if ! $(hash megaraid-status &> /dev/null); then
     echo "megaraid-status or megaraidsas-status not installed"
     exit 1
@@ -12,14 +13,20 @@ fi
 echo "******************** Megaraid arrays ********************"
 
 if $SAS; then
-    megaraidsas-status
-    megaraidsas-status | grep -i optimal
+    MEGARAID=$(megaraidsas-status)
 else
-    megaraid-status
-    megaraid-status | grep -i optimal
+    MEGARAID=$(megaraid-status)
 fi
 
+raid_state=$(`$MEGARAID` | grep 'RAID' | awk '{print $1,"-",$8}')
+raid_disks_count=$(`$MEGARAID` | grep 'a0e' | wc -l)
+raid_disks_online=$(`$MEGARAID` | grep 'a0e.*online' | wc -l)
+raid_disks="RAID disks: $raid_disks_online / $raid_disks_count"
+
 # Check if raid status is optimal, if not, print red warning
-if ! [[ $? == 0 ]]; then
+if (( $raid_disk_count != $raid_disk_online )); then
     echo "<font color='red'>ALERT: RAID STATUS NOT OPTIMAL!</font>"
+else
+    `$MEGARAID`
+    echo $raid_disks
 fi
