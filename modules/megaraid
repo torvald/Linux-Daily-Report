@@ -9,7 +9,7 @@ if ! $(hash megaraid-status &> /dev/null); then
     exit 1
 fi
 
-echo "******************** Software raid arrays ********************"
+echo "******************** Megaraid arrays ********************"
 
 if $SAS; then
     megaraidsas-status
