@@ -6,7 +6,7 @@ echo "******************** Why you should read it all ********************"
 
 curl -s "http://www.reddit.com/r/reactiongifs/" > $TEMPFILE
 
-url=$(cat $TEMPFILE | grep "siteTable" | grep -o "http[a-Z\.:/]*\.gif" | head -n 1)
+url=$(cat $TEMPFILE | grep "siteTable" | grep -o "http[a-Z\.:/]*\.gif" | sort | uniq | sort -R | head -n 1)
 saying=$(cat $TEMPFILE | sed 's/http/\nhttp/g' | grep "$url" | head -n 2 | cut -d'>' -f2 | cut -d'<' -f1)
 
 echo '<img src="'$url'"/>'
