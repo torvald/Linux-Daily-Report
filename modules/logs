@@ -26,7 +26,6 @@ for log in $(find . /var/log/ | egrep "\.log$"); do
             fi
         done
         echo '<img src="http://chart.apis.google.com/chart?chxr=0,0,23|1,0,'$maxHeight'&chxt=x,y&chbh=a&chs=450x225&cht=bvs&chco=3072F3&chd=t:'${dataString%?}'&chdl=Number+of+lines&chtt='$log'" width="450" height="225" alt="'$log'" />'
-        head $TEMPLOGFILE
     fi
 done
 

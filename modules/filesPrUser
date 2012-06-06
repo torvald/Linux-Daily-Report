@@ -1,6 +1,6 @@
 #!/bin/bash
 # only taking thoes with GB or TB
-echo "******************** MySQL ********************"
+echo "******************** Open files pr user ********************"
 
 lsof | awk '{print $3}' | sort | uniq -c | sort -rn | head
 
