@@ -9,7 +9,9 @@ if (($UID != 0)); then
     exit 1
 fi
 
-if ! $(hash mdadm &> /dev/null); then
+MDADM="/sbin/mdadm"
+
+if ! $(command -v $MDADM &> /dev/null); then
     echo "mdadm not installed"
     exit 1
 fi
@@ -24,8 +26,8 @@ fi
 
 for array in `ls -1 /dev | egrep $grepLine`; do
     echo "Array: $array"
-    RAID_STATE=$(mdadm --detail /dev/$array | grep "State " | awk '{print "Raid state: "$3}')
-    RAID_DISKS=$(mdadm --detail /dev/$array | grep -E '(Raid|Working) Devices' | xargs | awk '{print "RAID disks:",$8,"/",$4,"online"}')
+    RAID_STATE=$($MDADM --detail /dev/$array | grep "State " | awk '{print "Raid state: "$3}')
+    RAID_DISKS=$($MDADM --detail /dev/$array | grep -E '(Raid|Working) Devices' | xargs | awk '{print "RAID disks:",$8,"/",$4,"online"}')
     echo "$RAID_STATE"
     echo -e "$RAID_DISKS\n"
 done

@@ -1,0 +1,12 @@
+#! /bin/bash
+# Checks APC-UPS status
+
+APCACCESS="/sbin/apcaccess"
+
+if ! $(command -v $APCACCESS &> /dev/null); then
+    echo "apcaccess not installed"
+    exit 1
+fi
+
+echo "******************** UPS status ********************"
+$APCACCESS status | egrep -i "STATUS  |LOADPCT|LINEV  |BCHARGE|BATTV  |OUTPUTV"

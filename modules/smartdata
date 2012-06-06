@@ -6,7 +6,9 @@ if (($UID != 0)); then
     exit 1
 fi
 
-if ! $(hash smartctl &> /dev/null); then
+SMARTCTL="/usr/sbin/smartctl"
+
+if ! $(command -v $SMARTCTL &> /dev/null); then
     echo "smart-tools not installed"
     exit 1
 fi
@@ -21,11 +23,11 @@ fi
 echo "******************** Disk S.M.A.R.T data ********************"
 
 while read DISK; do
-    temp=$(smartctl -A /dev/$DISK | grep -i temperature | awk '{print $10}')
-    smart=$(smartctl -a /dev/$DISK | grep "SMART overall-health self-assessment test result:" | cut -c 51-56)
-    age=$(smartctl -A /dev/$DISK | grep Power_On_Hours | awk '{print $10}')
-    loadcount=$(smartctl -A /dev/$DISK | grep "Load_Cycle_Count" | awk '{print $10}')
-    size=$(smartctl -i /dev/$DISK | grep "Capacity" | awk '{print $3}' | sed 's/,//g')
+    temp=$($SMARTCTL -a /dev/$DISK | grep -i temperature | awk '{print $10}')
+    smart=$($SMARTCTL -a /dev/$DISK | grep "SMART overall-health self-assessment test result:" | cut -c 51-56)
+    age=$($SMARTCTL -a /dev/$DISK | grep Power_On_Hours | awk '{print $10}')
+    loadcount=$($SMARTCTL -a /dev/$DISK | grep "Load_Cycle_Count" | awk '{print $10}')
+    size=$($SMARTCTL -i /dev/$DISK | grep "Capacity" | awk '{print $3}' | sed 's/,//g')
     let size=$size/1000000000
     let ctemp=$temp
     let age=($age)/24

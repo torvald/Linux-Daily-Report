@@ -1,7 +1,9 @@
 #! /bin/bash
 # Outputs total mail sent/received and top senders
 
-if ! $(hash postfix &> /dev/null); then
+POSTFIX="/usr/sbin/postfix"
+
+if ! $(command -v $POSTFIX &> /dev/null); then
     echo "postfix not installed"
     exit 1
 fi

@@ -3,6 +3,8 @@
 
 cd $(dirname $0)
 
+# Source stuff
+source /etc/profile
 source inc/functions.bash
 source inc/init.bash
 
@@ -27,7 +29,6 @@ for MODUL in $MODULES; do
     fi
     modules/$MODUL > $TEMP # temp file from systemCheck
     if [ $? == 0 ]; then
-        #cat $TEMP | sed 's/\t/\&emsp;/g' >> $MAIL
         cat $TEMP >> $MAIL
         echo "<br><br>" >> $MAIL
     else
